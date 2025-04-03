@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>FNAMG 4 TRADING</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+    
+    <style>
+        :root {
+            --primary-dark: #0f172a;
+            --primary-color: #1e293b;
+            --secondary-color: #f97316;
+            --accent-color: #334155;
+            --text-color: #e2e8f0;
+            --success-color: #22c55e;
+            --error-color: #ef4444;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--primary-dark);
+            color: var(--text-color);
+            background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKEOBIep6_22esj0sSu7Y6V8ZYwvjAugsC-5PQle4ePKdLWYgM7MwmTGI&s=10');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            background-blend-mode: overlay;
+        }
+        
+        .screen {
+            display: none;
+            min-height: 100vh;
+            padding: 2rem;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+        
+        .active-screen {
+            display: flex !important;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Back Button */
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(249, 115, 22, 0.2);
+            border: none;
+            color: var(--secondary-color);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+        
+        .back-btn:hover {
+            background: rgba(249, 115, 22, 0.4);
+            transform: translateX(-3px);
+        }
+        
+        /* Welcome Screen */
+        .welcome-screen {
+            background-color: rgba(15, 23, 42, 0.9);
+            text-align: center;
+        }
+        
+        .welcome-screen .logo {
+            width: 180px;
+            margin-bottom: 2rem;
+            filter: drop-shadow(0 0 12px rgba(249, 115, 22, 0.7));
+            transition: all 0.5s ease;
+        }
+        
+        .welcome-screen .logo:hover {
+            transform: scale(1.05);
+        }
+        
+        .welcome-screen h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(to right, #f97316, #f59e0b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 10px rgba(249, 115, 22, 0.3);
+        }
+        
+        .welcome-screen p {
+            font-size: 1.1rem;
+            margin-bottom: 2.5rem;
+            max-width: 500px;
+            opacity: 0.9;
+        }
+        
+        /* Login Screen */
+        .login-screen {
+            background-color: rgba(15, 23, 42, 0.95);
+        }
+        
+        .login-card {
+            width: 100%;
+            max-width: 400px;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+            transform: translateY(0);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(249, 115, 22, 0.3);
+            backdrop-filter: blur(8px);
+        }
+        
+        .login-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            border-color: rgba(249, 115, 22, 0.5);
+        }
+        
+        .login-card .card-header {
+            background: linear-gradient(135deg, #f97316, #f59e0b);
+            color: white;
+            text-align: center;
+            padding: 1.8rem;
+            border-bottom: none;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .login-card .card-header::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+            transform: rotate(30deg);
+            pointer-events: none;
+        }
+        
+        .login-card .card-body {
+            background-color: rgba(30, 41, 59, 0.7);
+            padding: 2.5rem 2rem;
+            backdrop-filter: blur(4px);
+        }
+        
+        /* Trading Screen */
+        .trading-screen .header {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            padding: 1.8rem;
+            text-align: center;
+            border-bottom: 3px solid var(--secondary-color);
+            margin-bottom: 2.5rem;
+            border-radius: 0 0 16px 16px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            width: 100%;
+        }
+        
+        .trading-screen .container {
+            max-width: 850px;
+            padding: 0 1.5rem;
+        }
+        
+        .form-card {
+            background-color: rgba(30, 41, 59, 0.8);
+            border-radius: 16px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+            padding: 2.5rem;
+            border: 1px solid rgba(249, 115, 22, 0.2);
+            backdrop-filter: blur(6px);
+            transition: all 0.3s ease;
+        }
+        
+        .form-card:hover {
+            border-color: rgba(249, 115, 22, 0.4);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+        
+        /* Buttons */
+        .btn-custom {
+            background: linear-gradient(135deg, #f97316, #f59e0b);
+            border: none;
+            color: white;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            border-radius: 10px;
+            padding: 14px 28px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 15px rgba(249, 115, 22, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-custom::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 100%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+            transform: rotate(30deg);
+            pointer-events: none;
+            transition: all 0.5s ease;
+            opacity: 0;
+        }
+        
+        .btn-custom:hover {
+            background: linear-gradient(135deg, #ea580c, #f97316);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(249, 115, 22, 0.4);
+        }
+        
+        .btn-custom:hover::after {
+            opacity: 1;
+            right: 100%;
+        }
+        
+        .btn-custom:active {
+            transform: translateY(1px);
+        }
+        
+        /* Form Elements */
+        .form-control, .form-select {
+            background-color: rgba(15, 23, 42, 0.7);
+            border: 1px solid #334155;
+            color: var(--text-color);
+            border-radius: 10px;
+            padding: 12px 16px;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control::placeholder {
+            color: #94a3b8;
+            opacity: 0.7;
+        }
+        
+        .form-control:focus, .form-select:focus {
+            background-color: rgba(15, 23, 42, 0.9);
+            border-color: var(--secondary-color);
+            color: var(--text-color);
+            box-shadow: 0 0 0 0.25rem rgba(249, 115, 22, 0.25);
+        }
+        
+        label {
+            font-weight: 600;
+            margin-bottom: 0.7rem;
+            display: block;
+            color: #f8fafc;
+        }
+        
+        /* Footer Link */
+        .footer-link {
+            position: absolute;
+            bottom: 20px;
+            left: 0;
+            right: 0;
+            text-align: center;
+        }
+        
+        .footer-link a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .footer-link a:hover {
+            color: #f8fafc;
+            text-decoration: underline;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .welcome-screen h1 {
+                font-size: 2.2rem;
+            }
+            
+            .welcome-screen .logo {
+                width: 150px;
+            }
+            
+            .form-card {
+                padding: 1.8rem;
+            }
+            
+            .login-card .card-body {
+                padding: 2rem 1.5rem;
+            }
+        }
+        
+        /* Results Modal */
+        .results-modal {
+            background-color: rgba(15, 23, 42, 0.95);
+            border: 1px solid rgba(249, 115, 22, 0.3);
+        }
+        
+        .results-content {
+            font-family: 'Poppins', sans-serif;
+            background-color: rgba(30, 41, 59, 0.8);
+            padding: 1.5rem;
+            border-radius: 8px;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+        
+        /* Signal Strength Indicator */
+        .signal-strength {
+            display: inline-block;
+            width: 100px;
+            height: 6px;
+            background-color: #334155;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+        
+        .signal-strength-bar {
+            height: 100%;
+            background: linear-gradient(to right, #ef4444, #f97316, #22c55e);
+            border-radius: 3px;
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: var(--primary-dark);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--secondary-color);
+            border-radius: 4px;
+        }
+        
+        /* New Styles for Enhanced Version */
+        .signal-card {
+            transition: all 0.3s ease;
+            border-left: 3px solid #f97316;
+            margin-bottom: 15px;
+            padding: 15px;
+            background-color: rgba(30, 41, 59, 0.9);
+            border-radius: 8px;
+        }
+        
+        .signal-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            border-left-color: #22c55e;
+        }
+        
+        .text-orange {
+            color: #f97316;
+        }
+        
+        .bg-dark {
+            background-color: rgba(30, 41, 59, 0.9) !important;
+        }
+        
+        .input-group-text {
+            background-color: rgba(15, 23, 42, 0.7) !important;
+            border-color: #334155 !important;
+        }
+        
+        .modal-header {
+            border-bottom: 1px solid #334155 !important;
+        }
+        
+        .modal-footer {
+            border-top: 1px solid #334155 !important;
+        }
+        
+        .text-success {
+            color: #22c55e !important;
+        }
+        
+        .text-danger {
+            color: #ef4444 !important;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Welcome Screen -->
+    <div class="screen welcome-screen active-screen" id="welcomeScreen">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcHi70IsdmSvNw5ONOE17g2R2X3FHhHc8E7z50P86gPN2LBqkyKPZud5A&s=10" alt="FNAMG Logo" class="logo">
+        <h1 class="animate__animated animate__fadeInUp">Welcome to FNAMG 4 TRADING</h1>
+        <p class="animate__animated animate__fadeInUp animate__delay-1s">Advanced algorithmic trading signals for OTC markets</p>
+        <button class="btn btn-custom animate__animated animate__fadeInUp animate__delay-2s" onclick="showScreen('loginScreen')">
+            Get Started <i class="fas fa-arrow-right ml-2"></i>
+        </button>
+        
+        <div class="footer-link">
+            <a href="https://t.me/ninjaoftrading1" target="_blank"><i class="fab fa-telegram mr-2"></i>Contact Support</a>
+        </div>
+    </div>
+
+    <!-- Login Screen -->
+    <div class="screen login-screen" id="loginScreen">
+        <button class="back-btn" onclick="showScreen('welcomeScreen')">
+            <i class="fas fa-arrow-left"></i>
+        </button>
+        
+        <div class="login-card">
+            <div class="card-header">
+                <h4><i class="fas fa-lock mr-2"></i> Account Login</h4>
+            </div>
+            <div class="card-body">
+                <div class="mb-4">
+                    <label for="email"><i class="fas fa-envelope mr-2"></i>Email Address</label>
+                    <input type="email" class="form-control" id="email" placeholder="Enter your email" autocomplete="off">
+                </div>
+                <div class="mb-4">
+                    <label for="password"><i class="fas fa-key mr-2"></i>Password</label>
+                    <input type="password" class="form-control" id="password" placeholder="Enter your password" autocomplete="new-password">
+                </div>
+                <button class="btn btn-custom w-100 py-3" onclick="login()">
+                    <i class="fas fa-sign-in-alt mr-2"></i> Login
+                </button>
+            </div>
+        </div>
+        
+        <div class="footer-link">
+            <a href="https://t.me/ninjaoftrading1" target="_blank"><i class="fab fa-telegram mr-2"></i>Contact Support</a>
+        </div>
+    </div>
+
+    <!-- Trading Screen -->
+    <div class="screen trading-screen" id="tradingScreen">
+        <button class="back-btn" onclick="showScreen('loginScreen')">
+            <i class="fas fa-arrow-left"></i>
+        </button>
+        
+        <div class="header">
+            <h3><i class="fas fa-chart-line mr-2"></i> FNAMG 4 TRADING</h3>
+            <p class="mb-0">Generate high-probability trading signals</p>
+        </div>
+        
+        <div class="container">
+            <div class="form-card">
+                <h4 class="text-center mb-4"><i class="fas fa-cogs mr-2"></i> Signal Generator</h4>
+                
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <label><i class="fas fa-exchange-alt mr-2"></i>Trading Pair:</label>
+                        <select class="form-select" id="cbAtivo">
+                            <option value="0" selected>All Major Pairs</option>
+                            <option value="AUD_CAD">AUD/CAD</option>
+                            <option value="AUD_CHF">AUD/CHF</option>
+                            <option value="AUD_JPY">AUD/JPY</option>
+                            <option value="AUD_USD">AUD/USD</option>
+                            <option value="CAD_JPY">CAD/JPY</option>
+                            <option value="EUR_AUD">EUR/AUD</option>
+                            <option value="EUR_CAD">EUR/CAD</option>
+                            <option value="EUR_CHF">EUR/CHF</option>
+                            <option value="EUR_GBP">EUR/GBP</option>
+                            <option value="EUR_JPY">EUR/JPY</option>
+                            <option value="EUR_NZD">EUR/NZD</option>
+                            <option value="EUR_USD">EUR/USD</option>
+                            <option value="GBP_AUD">GBP/AUD</option>
+                            <option value="GBP_CAD">GBP/CAD</option>
+                            <option value="GBP_CHF">GBP/CHF</option>
+                            <option value="GBP_JPY">GBP/JPY</option>
+                            <option value="GBP_NZD">GBP/NZD</option>
+                            <option value="GBP_USD">GBP/USD</option>
+                            <option value="NZD_CHF">NZD/CHF</option>
+                            <option value="NZD_USD">NZD/USD</option>
+                            <option value="USD_CAD">USD/CAD</option>
+                            <option value="USD_CHF">USD/CHF</option>
+                            <option value="USD_JPY">USD/JPY</option>
+                            <option value="XAU_USD">XAU/USD (Gold)</option>
+                        </select>
+                    </div>
+                    
+                    <div class="col-md-6 mb-4">
+                        <label><i class="fas fa-arrow-up mr-2"></i>Direction:</label>
+                        <select class="form-select" id="selOrderType">
+                            <option value="PUT">PUT</option>
+                            <option value="CALL">CALL</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <label><i class="fas fa-percentage mr-2"></i>Min Win Rate:</label>
+                        <select class="form-select" id="selPercentageMin">
+                            <option value="80">80%</option>
+                            <option value="85">85%</option>
+                            <option value="90">90%</option>
+                            <option value="95">95%</option>
+                            <option value="100">100%</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <label><i class="fas fa-percentage mr-2"></i>Max Win Rate:</label>
+                        <select class="form-select" id="selPercentageMax">
+                            <option value="80">80%</option>
+                            <option value="85">85%</option>
+                            <option value="90">90%</option>
+                            <option value="95">95%</option>
+                            <option value="100" selected>100%</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6 mb-4">
+                        <label><i class="fas fa-clock mr-2"></i>Expiration Time:</label>
+                        <select class="form-select" id="selExpiration">
+                            <option value="M1">1 Minute</option>
+                            <option value="M5" selected>5 Minutes</option>
+                            <option value="M10">10 Minutes</option>
+                            <option value="M15">15 Minutes</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-4">
+                        <label><i class="fas fa-calendar-day mr-2"></i>Analysis Period:</label>
+                        <select class="form-select" id="selDays">
+                            <option value="1">1 Day</option>
+                            <option value="3">3 Days</option>
+                            <option value="7" selected>7 Days</option>
+                            <option value="14">14 Days</option>
+                            <option value="21">21 Days</option>
+                            <option value="30">30 Days</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="d-flex justify-content-center mt-4">
+                    <button class="btn btn-custom px-5" onclick="getHistoric()">
+                        <i class="fas fa-bolt mr-2"></i> Generate Signals
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-link">
+            <a href="https://t.me/ninjaoftrading1" target="_blank"><i class="fab fa-telegram mr-2"></i>Contact Support</a>
+        </div>
+        
+        <!-- Results Modal -->
+        <div class="modal fade" id="resultsModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content results-modal border-secondary">
+                    <div class="modal-header border-secondary">
+                        <h5 class="modal-title"><i class="fas fa-chart-bar mr-2"></i>Generated Signals (<span id="signalCount">0</span>)</h5>
+                        
+                        <div class="d-flex align-items-center gap-2">
+                            <!-- Search Box -->
+                            <div class="input-group input-group-sm" style="width: 200px;">
+                                <span class="input-group-text bg-dark border-secondary"><i class="fas fa-search"></i></span>
+                                <input type="text" id="signalSearch" class="form-control bg-dark border-secondary text-white" placeholder="Search signals...">
+                            </div>
+                            
+                            <!-- Filter Dropdown -->
+                            <select id="signalFilter" class="form-select form-select-sm bg-dark border-secondary text-white" style="width: 120px;">
+                                <option value="all">All Signals</option>
+                                <option value="high">High Strength (>80)</option>
+                                <option value="medium">Medium (60-80)</option>
+                                <option value="low">Low (<60)</option>
+                            </select>
+                            
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                    </div>
+                    <div class="modal-body">
+                        <div class="results-content" id="resultsContent"></div>
+                    </div>
+                    <div class="modal-footer border-secondary">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            <i class="fas fa-times mr-2"></i> Close
+                        </button>
+                        <button type="button" class="btn btn-custom" onclick="downloadResults()">
+                            <i class="fas fa-download mr-2"></i> Download
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <script>
+        // Store generated results
+        let currentResults = "";
+        let signalsData = [];
+        const allPairs = [
+            // Major Forex Pairs
+            'EUR/USD', 'USD/JPY', 'GBP/USD', 'AUD/USD', 
+            'USD/CAD', 'USD/CHF', 'NZD/USD',
+            
+            // Minor Forex Pairs
+            'EUR/GBP', 'EUR/JPY', 'EUR/CHF', 'EUR/AUD', 
+            'EUR/CAD', 'EUR/NZD', 'GBP/JPY', 'GBP/CHF',
+            'GBP/AUD', 'GBP/CAD', 'GBP/NZD', 'AUD/JPY',
+            'AUD/CAD', 'AUD/CHF', 'AUD/NZD', 'CAD/JPY',
+            'CHF/JPY', 'NZD/JPY', 'NZD/CAD', 'NZD/CHF',
+            
+            // Exotic Pairs
+            'USD/SGD', 'USD/HKD', 'USD/TRY', 'USD/ZAR',
+            'USD/MXN', 'USD/THB', 'USD/SEK', 'USD/NOK',
+            'USD/DKK', 'EUR/TRY', 'EUR/SEK', 'EUR/NOK',
+            'EUR/DKK', 'GBP/TRY', 'GBP/SEK', 'GBP/NOK',
+            
+            // Metals & Commodities
+            'XAU/USD', 'XAG/USD', 'XPT/USD', 'XPD/USD',
+            'OIL/USD', 'GAS/USD', 'COPPER/USD'
+        ];
+        
+        // Screen management with enhanced animations
+        function showScreen(screenId) {
+            // Animate out current screen
+            const currentScreen = document.querySelector('.active-screen');
+            if (currentScreen) {
+                currentScreen.classList.add('animate__fadeOut');
+                setTimeout(() => {
+                    currentScreen.classList.remove('active-screen', 'animate__fadeOut');
+                }, 500);
+            }
+            
+            // Animate in new screen
+            setTimeout(() => {
+                const newScreen = document.getElementById(screenId);
+                newScreen.classList.add('active-screen', 'animate__fadeIn');
+                setTimeout(() => {
+                    newScreen.classList.remove('animate__fadeIn');
+                }, 800);
+            }, 300);
+        }
+        
+        // Login function with hardcoded credentials
+        function login() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            const correctEmail = "fadyfnamg@gmail.com";
+            const correctPassword = "FADY FNAMG 1";
+            
+            if(email === correctEmail && password === correctPassword) {
+                // Show loading animation
+                const loginBtn = document.querySelector('.login-screen .btn-custom');
+                loginBtn.innerHTML = '<span class="spinner-border spinner-border-sm mr-2" role="status"></span> Authenticating...';
+                loginBtn.disabled = true;
+                
+                // Simulate authentication delay
+                setTimeout(() => {
+                    showScreen('tradingScreen');
+                    loginBtn.innerHTML = '<i class="fas fa-sign-in-alt mr-2"></i> Login';
+                    loginBtn.disabled = false;
+                    
+                    // Clear credentials fields
+                    document.getElementById('email').value = "";
+                    document.getElementById('password').value = "";
+                }, 1500);
+            } else {
+                // Shake animation for wrong credentials
+                const loginCard = document.querySelector('.login-card');
+                loginCard.classList.add('animate__animated', 'animate__headShake');
+                setTimeout(() => {
+                    loginCard.classList.remove('animate__animated', 'animate__headShake');
+                }, 1000);
+                
+                alert('Invalid credentials! Please try again.');
+            }
+        }
+        
+        // Generate signals function
+        function getHistoric() {
+            const generateBtn = document.querySelector('.trading-screen .btn-custom');
+            const selectedPair = document.getElementById('cbAtivo').value;
+            
+            // Disable button and show loading state
+            generateBtn.innerHTML = '<span class="spinner-border spinner-border-sm mr-2" role="status"></span> Processing...';
+            generateBtn.disabled = true;
+            
+            // Generate 180-200 signals
+            setTimeout(() => {
+                signalsData = generateSignals(selectedPair, Math.floor(Math.random() * 21) + 180);
+                displaySignals(signalsData);
+                
+                // Show results in modal
+                const resultsModal = new bootstrap.Modal(document.getElementById('resultsModal'));
+                resultsModal.show();
+                
+                // Setup filters
+                setupFilters();
+                
+                // Re-enable button
+                generateBtn.innerHTML = '<i class="fas fa-bolt mr-2"></i> Generate Signals';
+                generateBtn.disabled = false;
+            }, 100);
+        }
+        
+        // Generate signals data with Egypt timezone
+        function generateSignals(selectedPair, count) {
+            const minRate = parseInt(document.getElementById('selPercentageMin').value);
+            const maxRate = parseInt(document.getElementById('selPercentageMax').value);
+            const expiration = document.getElementById('selExpiration').value.replace('M', '');
+            const direction = document.getElementById('selOrderType').value;
+            
+            return Array.from({ length: count }, (_, i) => {
+                const pair = selectedPair === "0" ? 
+                    allPairs[Math.floor(Math.random() * allPairs.length)] : 
+                    selectedPair.replace('_', '/');
+                
+                // Create random entry time in Egypt timezone (GMT+2)
+                const randomDayOffset = Math.floor(Math.random() * 7);
+                const randomHour = Math.floor(Math.random() * 24);
+                const randomMinute = Math.floor(Math.random() * 60);
+                
+                // Create date in Egypt timezone
+                const entryDate = new Date();
+                entryDate.setDate(entryDate.getDate() + randomDayOffset);
+                entryDate.setHours(randomHour, randomMinute, 0);
+                
+                // Format for Egypt time
+                const egyptTimeStr = entryDate.toLocaleString('en-US', {
+                    timeZone: 'Africa/Cairo',
+                    weekday: 'short',
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: false
+                });
+                
+                return {
+                    id: i + 1,
+                    pair: `${pair}_OTC`,
+                    direction: direction,
+                    expiration: expiration,
+                    winRate: Math.floor(Math.random() * (maxRate - minRate + 1)) + minRate,
+                    strength: Math.floor(Math.random() * 40) + 60,
+                    entryTime: entryDate,
+                    entryTimeStr: egyptTimeStr
+                };
+            });
+        }
+        
+        // Display signals in modal
+        function displaySignals(signals) {
+            const resultsContent = document.getElementById('resultsContent');
+            const signalCount = document.getElementById('signalCount');
+            
+            signalCount.textContent = signals.length;
+            
+            resultsContent.innerHTML = signals.map(signal => {
+                return `
+                    <div class="signal-card" 
+                         data-strength="${signal.strength}" 
+                         data-pair="${signal.pair.toLowerCase()}">
+                        <h6 class="text-orange">🔹 Signal #${signal.id}</h6>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p class="mb-1"><i class="fas fa-exchange-alt me-2"></i>Pair: ${signal.pair}</p>
+                                <p class="mb-1"><i class="fas fa-arrow-${signal.direction === 'CALL' ? 'up' : 'down'} me-2"></i>Direction: 
+                                    <span class="${signal.direction === 'CALL' ? 'text-success' : 'text-danger'}">${signal.direction}</span>
+                                </p>
+                                <p class="mb-1"><i class="fas fa-calendar me-2"></i>Entry Time (Egypt): ${signal.entryTimeStr}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p class="mb-1"><i class="fas fa-clock me-2"></i>Expiration: ${signal.expiration} Minutes</p>
+                                <p class="mb-1"><i class="fas fa-percentage me-2"></i>Win Rate: ${signal.winRate}%</p>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center mt-2">
+                            <small class="me-2">Strength:</small>
+                            <div class="signal-strength" style="width: 100px;">
+                                <div class="signal-strength-bar" style="width: ${signal.strength}%"></div>
+                            </div>
+                            <small class="ms-2">${signal.strength}/100</small>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            // Format for download
+            currentResults = formatSignalsForDownload(signals);
+        }
+        
+        // Setup search and filters
+        function setupFilters() {
+            const searchInput = document.getElementById('signalSearch');
+            const filterSelect = document.getElementById('signalFilter');
+            
+            const filterSignals = () => {
+                const searchTerm = searchInput.value.toLowerCase();
+                const filterValue = filterSelect.value;
+                
+                const filtered = signalsData.filter(signal => {
+                    const matchesSearch = signal.pair.toLowerCase().includes(searchTerm);
+                    let matchesFilter = true;
+                    
+                    if (filterValue === 'high') matchesFilter = signal.strength > 80;
+                    else if (filterValue === 'medium') matchesFilter = signal.strength >= 60 && signal.strength <= 80;
+                    else if (filterValue === 'low') matchesFilter = signal.strength < 60;
+                    
+                    return matchesSearch && matchesFilter;
+                });
+                
+                displaySignals(filtered);
+            };
+            
+            searchInput.addEventListener('input', filterSignals);
+            filterSelect.addEventListener('change', filterSignals);
+        }
+        
+        // Format signals for download
+        function formatSignalsForDownload(signals) {
+            let result = "╔══════════════════════════════╗\n";
+            result += "║      FNAMG 4 TRADING SIGNALS    ║\n";
+            result += "╚══════════════════════════════╝\n\n";
+            
+            signals.forEach(signal => {
+                result += `🔹 Signal #${signal.id}:\n`;
+                result += `   • Pair: ${signal.pair}\n`;
+                result += `   • Direction: ${signal.direction}\n`;
+                result += `   • Entry Time (Egypt): ${signal.entryTimeStr}\n`;
+                result += `   • Expiration: ${signal.expiration} Minutes\n`;
+                result += `   • Success Rate: ${signal.winRate}%\n`;
+                result += `   • Strength: ${signal.strength}/100\n\n`;
+            });
+            
+            result += "─────────────────────────────────\n";
+            result += "💡 Join @AL_NINJA for more tools\n";
+            result += "⚠️ Risk Warning: Trading involves risk";
+            
+            return result;
+        }
+        
+        // Download results
+        function downloadResults() {
+            if (!currentResults) return;
+            
+            const filename = 'FNAMG_Signals_' + new Date().toISOString().slice(0,10) + '.txt';
+            
+            const element = document.createElement('a');
+            element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(currentResults));
+            element.setAttribute('download', filename);
+            element.style.display = 'none';
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+        }
+        
+        // Initialize with welcome screen
+        document.addEventListener('DOMContentLoaded', function() {
+            // Preload images
+            const bgImg = new Image();
+            bgImg.src = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKEOBIep6_22esj0sSu7Y6V8ZYwvjAugsC-5PQle4ePKdLWYgM7MwmTGI&s=10';
+            
+            const logoImg = new Image();
+            logoImg.src = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcHi70IsdmSvNw5ONOE17g2R2X3FHhHc8E7z50P86gPN2LBqkyKPZud5A&s=10';
+        });
+    </script>
+</body>
+</html>
